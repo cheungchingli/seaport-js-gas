@@ -5,6 +5,7 @@ import {
   ethers,
   PayableOverrides,
   providers,
+  GasSetting,
 } from "ethers";
 import { formatBytes32String, _TypedDataEncoder } from "ethers/lib/utils";
 import { SeaportABI } from "./abi/Seaport";
@@ -65,7 +66,9 @@ import { executeAllActions, getTransactionMethods } from "./utils/usecase";
 export class Seaport {
   // Provides the raw interface to the contract for flexibility
   public contract: SeaportContract;
-
+  public maxFeePerGas: string;
+  public maxPriorityFeePerGas: string;
+  public gasLimit: number;
   private provider: providers.Provider;
 
   private signer?: Signer;
@@ -121,7 +124,9 @@ export class Seaport {
       SeaportABI,
       this.multicallProvider
     ) as SeaportContract;
-
+    this.maxFeePerGas = "";
+    this.maxPriorityFeePerGas = "";
+    this.gasLimit = 0;
     this.config = {
       ascendingAmountFulfillmentBuffer,
       balanceAndApprovalChecksOnOrderCreation,
@@ -700,7 +705,11 @@ export class Seaport {
     }));
 
     const isRecipientSelf = recipientAddress === ethers.constants.AddressZero;
-
+    const gasSetting: GasSetting = {
+      maxFeePerGas: this.maxFeePerGas,
+      maxPriorityFeePerGas: this.maxPriorityFeePerGas,
+      gasLimit: this.gasLimit,
+    };
     // We use basic fulfills as they are more optimal for simple and "hot" use cases
     // We cannot use basic fulfill if user is trying to partially fill though.
     if (
@@ -720,6 +729,7 @@ export class Seaport {
         fulfillerOperator,
         signer: fulfiller,
         tips: tipConsiderationItems,
+        gasSetting,
       });
     }
 
@@ -744,6 +754,7 @@ export class Seaport {
       offererOperator,
       fulfillerOperator,
       recipientAddress,
+      gasSetting,
     });
   }
 
