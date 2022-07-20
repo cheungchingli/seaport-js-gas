@@ -56,6 +56,12 @@ export type Signer = ethers.Signer & {
   ): Promise<string>;
 };
 
+export type GasSetting = {
+  maxFeePerGas: string;
+  maxPriorityFeePerGas: string;
+  gasLimit: number;
+};
+
 export type OfferItem = {
   itemType: ItemType;
   token: string;
