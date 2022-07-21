@@ -5,7 +5,6 @@ import {
   ethers,
   PayableOverrides,
   providers,
-  GasSetting,
 } from "ethers";
 import { formatBytes32String, _TypedDataEncoder } from "ethers/lib/utils";
 import { SeaportABI } from "./abi/Seaport";
@@ -38,6 +37,7 @@ import type {
   MatchOrdersFulfillment,
   SeaportContract,
   Signer,
+  GasSetting,
 } from "./types";
 import { getApprovalActions } from "./utils/approval";
 import {
