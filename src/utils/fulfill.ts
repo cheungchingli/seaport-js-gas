@@ -324,7 +324,7 @@ export async function fulfillBasicOrder({
     transactionMethods: getTransactionMethods(
       seaportContract.connect(signer),
       "fulfillBasicOrder",
-      [basicOrderParameters, payableOverrides]
+      [basicOrderParameters, payableOverrides],
       domain
     ),
   } as const;
